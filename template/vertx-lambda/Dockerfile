@@ -1,10 +1,16 @@
 # Get a build environment
 FROM maven:3-jdk-11-openj9 as builder
 # Set working dir
-RUN mkdir /app
-COPY . /app/
+RUN mkdir -p /app/function
 WORKDIR /app/function
-# build the function
+
+# copy the project files
+COPY ./function/pom.xml ./pom.xml
+# build all dependencies for offline use
+RUN mvn dependency:go-offline -B
+# copy your other files
+COPY ./function/src ./src
+# build for release
 RUN mvn package
 
 # Get the latest watchdog
