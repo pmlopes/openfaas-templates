@@ -6,8 +6,8 @@ WORKDIR /app/function
 
 # copy the project files
 COPY ./function/pom.xml ./pom.xml
-# build all dependencies for offline use
-RUN mvn dependency:go-offline -B
+# cache all dependencies + plugins
+RUN mvn de.qaware.maven:go-offline-maven-plugin:resolve-dependencies
 # copy your other files
 COPY ./function/src ./src
 # build for release
